@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migration Memories 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Changa+One&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --accent: #FFA500;
+            --accent-glow: rgba(255, 165, 0, 0.4);
+            --bg-glass: rgba(15, 23, 42, 0.75);
+            --card-glass: rgba(255, 255, 255, 0.06);
+            --border-glass: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            background-image: url("../static/background.jpg");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+            font-family: 'Lora', serif;
+            color: #f8fafc;
+            background-color: #0b1619;
+            min-height: 100vh;
+        }
+
+        .overlay {
+            min-height: 100vh;
+            background: linear-gradient(180deg, rgba(11, 22, 25, 0.5) 0%, var(--bg-glass) 100%);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 60px 20px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-family: 'Changa One', sans-serif;
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0 0 40px 0;
+            text-align: center;
+            background: linear-gradient(135deg, #fff 30%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
+        }
+
+        /* Hero Container with relative positioning for download placement */
+        .main-display {
+            width: 100%;
+            max-width: 850px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        #heroImage {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            border: 1px solid var(--border-glass);
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            display: block;
+        }
+
+        /* Modern Floating Download Button */
+        .download-btn {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid var(--border-glass);
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            text-decoration: none;
+            font-family: sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .download-btn:hover {
+            background: var(--accent);
+            color: #0f172a;
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px var(--accent-glow);
+        }
+
+        .download-btn svg {
+            fill: currentColor;
+            width: 16px;
+            height: 16px;
+        }
+
+        .slider-section {
+            width: 100%;
+            max-width: 1000px;
+            background: var(--card-glass);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border-top: 1px solid var(--border-glass);
+            border-bottom: 1px solid var(--border-glass);
+            padding: 20px 0;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: center;
+            border-radius: 16px;
+        }
+
+        .slider-track {
+            display: flex;
+            overflow-x: auto;
+            gap: 16px;
+            width: 95%;
+            padding: 10px;
+            scroll-behavior: smooth;
+        }
+
+        .slider-track::-webkit-scrollbar {
+            height: 5px;
+        }
+        .slider-track::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+        }
+        .slider-track::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 10px;
+        }
+
+        .thumb {
+            flex: 0 0 auto;
+            width: 140px;
+            height: 85px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            opacity: 0.4;
+            transform: scale(0.96);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .thumb:hover {
+            opacity: 0.8;
+            transform: scale(1);
+        }
+
+        .thumb.active {
+            opacity: 1;
+            border-color: var(--accent);
+            transform: scale(1.02);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .upload-container {
+            width: 100%;
+            max-width: 450px;
+            background: var(--card-glass);
+            border: 1px solid var(--border-glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            box-sizing: border-box;
+        }
+
+        .upload-container h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .upload-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .upload-form input[type="file"] {
+            background: rgba(0, 0, 0, 0.2);
+            color: #cbd5e1;
+            padding: 15px;
+            border: 1px dashed rgba(255,165,0,0.4);
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        .upload-form input[type="file"]:hover {
+            border-color: var(--accent);
+        }
+
+        .upload-form button {
+            background: var(--accent);
+            color: #0f172a;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px var(--accent-glow);
+        }
+
+        .upload-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--accent-glow);
+            background: #ffb320;
+        }
+
+        .thanks-footer {
+            margin-top: 60px;
+            color: rgba(255, 255, 255, 0.3);
+            font-family: 'Changa One', sans-serif;
+            font-size: 2rem;
+            letter-spacing: 4px;
+            text-align: center;
+            transition: color 0.3s;
+        }
+
+        .thanks-footer:hover {
+            color: var(--accent);
+        }
+
+        @media (max-width: 600px) {
+            .overlay { padding: 40px 15px; }
+            .slider-section { border-radius: 0; width: 100vw; }
+            .thumb { width: 110px; height: 70px; }
+            .upload-container { width: 100%; }
+            .download-btn { bottom: 15px; right: 15px; padding: 10px 16px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="overlay">
+    <h1>Migration Memories (2025-26)</h1>
+
+    <div class="main-display">
+        <img id="heroImage" src="{{ url_for('static', filename='photo1.jpg') }}" alt="Main active display collection view">
+
+        <a id="downloadLink" href="{{ url_for('static', filename='photo1.jpg') }}" download="migration-memory.jpg" class="download-btn">
+            <svg viewBox="0 0 24 24">
+                <path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z"/>
+            </svg>
+            Download
+        </a>
+    </div>
+
+    <div class="slider-section">
+        <div class="slider-track">
+            {% for i in range(1, 11) %}
+            <img src="{{ url_for('static', filename='photo' ~ i ~ '.jpg') }}"
+                 class="thumb {% if i == 1 %}active{% endif %}"
+                 alt="Migration memory gallery thumbnail {{ i }}"
+                 onclick="updateMain(this)">
+            {% endfor %}
+
+            {% for pic in visitor_photos %}
+            <img src="{{ url_for('static', filename='uploads/' ~ pic) }}"
+                 class="thumb"
+                 alt="Visitor uploaded content thumbnail"
+                 onclick="updateMain(this)">
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="upload-container">
+        <h2 style="color: var(--accent); margin-top: 0;">Share a Photo</h2>
+        <form class="upload-form" action="/upload" method="POST" enctype="multipart/form-data">
+            <input type="file" name="user_photo" accept="image/*" required>
+            <button type="submit">Add to Slider</button>
+        </form>
+    </div>
+
+    <div class="thanks-footer">THANKS FOR YOUR VISIT</div>
+</div>
+
+<script>
+    function updateMain(el) {
+        const hero = document.getElementById('heroImage');
+        const downloadLink = document.getElementById('downloadLink');
+
+        hero.style.opacity = '0.4';
+        hero.style.transform = 'scale(0.99)';
+
+        setTimeout(() => {
+            hero.src = el.src;
+            // Updates download destination to mirror current thumbnail path
+            downloadLink.href = el.src;
+
+            hero.style.opacity = '1';
+            hero.style.transform = 'scale(1)';
+        }, 200);
+
+        document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+        el.classList.add('active');
+
+        el.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    }
+</script>
+
+</body>
+</html>
